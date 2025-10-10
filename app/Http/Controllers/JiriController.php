@@ -2,34 +2,49 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\ContactRoles;
 use App\Models\Contact;
 use App\Models\Homework;
 use App\Models\Jiri;
+use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
 
 class JiriController extends Controller
 {
-    public function store()
+
+    public function store(Request $request): RedirectResponse
     {
-                $validated = request()->validate([
-                    'name' => 'required',
-                    'date' => 'required|date',
-                    'description' => 'nullable',
-                    'projects.*' => 'nullable|integer',
-                    'contacts.*' => 'nullable|integer',
-                    'roles.*' => 'nullable'
-                ]);
+        $validated_data = $request->validate([
+            'name' => 'required',
+            'date' => 'required|date',
+            'description' => 'nullable',
+            'contacts.*' => 'nullable|array',
+            'projects.*' => 'nullable',
+        ]);
 
-                $jiri = Jiri::create($validated);
-                $jiri->projects()->attach($validated['projects']);
-                $roles = [];
-                foreach ($validated['contacts'] as $contact){
-                    $role = $validated['roles'][$contact]??'none';
-                    $roles[$contact] = ['role'=>$role];
+
+        $jiri = Jiri::create($validated_data);
+
+        if (!empty($validated_data['projects'])) {
+            $jiri->projects()->attach($validated_data['projects']);
+        }
+
+        if (!empty($validated_data['contacts'])) {
+            foreach ($validated_data['contacts'] as $key => $contact) {
+                $jiri->contacts()->attach($key, ['role' => $contact['role']]);
+
+                if ($contact['role'] === ContactRoles::Evaluated->value) {
+                    $homeworks = Homework::where('jiri_id' , '=', $jiri->id)->pluck('id')->toArray();
+                    $correct_contact = Contact::where('contacts.id', '=', $key)->first();
+
+                    $correct_contact->homeworks()->attach($homeworks);
                 }
-                $jiri->contacts()->attach($roles);
+            }
+        }
 
-                return redirect(route('jiris.index'));
 
+
+        return redirect(route('jiris.index'));
     }
 
     public function index()

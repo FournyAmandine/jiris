@@ -142,23 +142,18 @@ it('creates a jiri with its contacts associated from a request containing jiri d
             ->pluck('id', 'id')
             ->toArray();
 
+        $form_data = array_merge($jiri, [
+            'contacts' => $contacts
+        ]);
+
         $available_roles = [
-            '1' => 'none',
-            '2' => ContactRoles::Evaluated->value,
-            '3' => ContactRoles::Evaluators->value,
+            1 => ContactRoles::Evaluators->value,
+            2 => ContactRoles::Evaluated->value,
         ];
 
-
-        $roles=[];
-        foreach ($contacts as $id=>$contact){
-            $roles[$id] = $available_roles[rand(1, 3)] ;
+        foreach ($contacts as $key => $contact) {
+            $form_data['contacts'][$key] = ['role' => $available_roles[random_int(1, 2)]];
         }
-
-        $form_data = array_merge($jiri,
-            [
-                'contacts'=>$contacts,
-                'roles'=>$roles
-            ]);
 
 
         $response = $this->post(route('jiris.store'), $form_data);
@@ -172,46 +167,44 @@ it('creates a jiri with its contacts associated from a request containing jiri d
 
 
 it('creates a jiri with its contacts associated and its associated projects from a request containing jiri data, contacts ids including their roles and projects ids and creates all the relationships', function () {
+
     $jiri = Jiri::factory()->raw();
+
     $contacts = Contact::factory()
-        ->count(2)
+        ->count(4)
         ->create()
         ->pluck('id', 'id')
         ->toArray();
+
     $projects = Project::factory()
-        ->count(2)
+        ->count(3)
         ->create()
         ->pluck('id', 'id')
         ->toArray();
+
+
+    $form_data = array_merge($jiri, [
+        'contacts' => $contacts,
+        'projects' => $projects,
+    ]);
 
     $available_roles = [
-        '1' => 'none',
-        '2' => ContactRoles::Evaluated->value,
-        '3' => ContactRoles::Evaluators->value,
+        1 => ContactRoles::Evaluated->value,
+        2 => ContactRoles::Evaluated->value
     ];
 
-
-    $roles=[];
-    foreach ($contacts as $id=>$contact){
-        $roles[$id] = $available_roles[rand(1, 3)] ;
+    foreach ($contacts as $key => $contact) {
+        $form_data['contacts'][$key] = ['role' => $available_roles[random_int(1, 2)]];
     }
-
-    $form_data = array_merge($jiri,
-        [
-            'contacts'=>$contacts,
-            'projects'=>$projects,
-            'roles'=>$roles
-        ]);
 
 
     $response = $this->post(route('jiris.store'), $form_data);
+    $response->assertStatus(302);
 
-
-
-    expect(Jiri::all()->count())->toBe(1);
-    expect(Contact::all()->count())->toBe(2);
-    expect(Project::all()->count())->toBe(2);
-    expect(Homework::all()->count())->toBe(2);
-    expect(Attendance::all()->count())->toBe(2);
-    expect(Implementation::all()->count())->toBe(4);
+    expect(Jiri::all()->count())->toBe(1)
+        ->and(Project::all()->count())->toBe(3)
+        ->and(Contact::all()->count())->toBe(4)
+        ->and(Attendance::all()->count())->toBe(4)
+        ->and(Homework::all()->count())->toBe(3)
+        ->and(Implementation::all()->count())->toBe(12);
 });
