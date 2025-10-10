@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Se connecter - Laravel</title>
+    <title>Créez un compte - Laravel</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="flex justify-center items-center min-h-screen">
 <section class=" shadow-2xl p-10 rounded-2xl">
 
     <svg  class="m-auto" height="100px" width="100px" version="1.1" id="_x32_" xmlns="http://www.w3.org/2000/svg"
-         xmlns:xlink="http://www.w3.org/1999/xlink"
-         viewBox="0 0 512 512" xml:space="preserve">
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          viewBox="0 0 512 512" xml:space="preserve">
         <g>
             <path class="st0" d="M505.837,180.418L279.265,76.124c-7.349-3.385-15.177-5.093-23.265-5.093c-8.088,0-15.914,1.708-23.265,5.093
 		L6.163,180.418C2.418,182.149,0,185.922,0,190.045s2.418,7.896,6.163,9.627l226.572,104.294c7.349,3.385,15.177,5.101,23.265,5.101
@@ -23,22 +23,30 @@
 		C278.145,344.44,267.25,346.831,256,346.831z"/>
         </g>
 </svg>
-    <h1 class="font-bold text-3xl my-5 text-center">{{__('login.identify_yourself')}}</h1>
-    <form action="{{route('login.store')}}" method="post">
+    <h1 class="font-bold text-3xl my-5 text-center">{{__('register.identify_yourself')}}</h1>
+    <form action="{{route('register.store')}}" method="post">
         @csrf
-        <p class="text-red-600 text-xs mb-3">{{__('login.fields_are_required')}}</p>
+        <p class="text-red-600 text-xs mb-3">{{__('register.fields_are_required')}}</p>
     </form>
     <fieldset>
         <div  class="flex flex-col flex-1 mb-4">
-            <label for="email">{{__('login.email')}}<small class="text-red-600 ml-1">*</small></label>
-            <input class="border-1 border-gray-300 rounded-md p-1 mt-1" type="email" id="email" name="email"  value="{{ old('email') }}">
+            <label for="name">{{__('register.name')}}<small class="text-red-600 ml-1">*</small></label>
+            <input class="border-1 border-gray-300 rounded-md p-1 mt-1" type="text" id="name" name="name"  value="{{ old('name') }}">
+            @error('name')
+            <p class=
+                   "error text-red-600 text-xs">{{ $message }}</p>
+            @enderror
+        </div>
+        <div  class="flex flex-col flex-1 mb-4">
+            <label for="email">{{__('register.email')}}<small class="text-red-600 ml-1">*</small></label>
+            <input class="border-1 border-gray-300 rounded-md p-1 mt-1" type="email" id="email" name="border-1 border-gray-300 rounded-sm p-1"  value="{{ old('email') }}">
             @error('email')
             <p class=
                    "error text-red-600 text-xs">{{ $message }}</p>
             @enderror
         </div>
         <div  class="flex flex-col flex-1 mb-4">
-            <label for="password">{{__('login.password')}}<small class="text-red-600 ml-1">*</small></label>
+            <label for="password">{{__('register.password')}}<small class="text-red-600 ml-1">*</small></label>
             <input class="border-1 border-gray-300 rounded-md p-1 mt-1" type="password" id="password" name="password"  value="{{ old('password') }}">
             {{--<svg width="25px" height="25px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M9.75 12C9.75 10.7574 10.7574 9.75 12 9.75C13.2426 9.75 14.25 10.7574 14.25 12C14.25 13.2426 13.2426 14.25 12 14.25C10.7574 14.25 9.75 13.2426 9.75 12Z" fill="#1C274C"/>
@@ -51,17 +59,15 @@
         </div>
         <div class="flex mt-5 items-center">
             <input class="mr-2" type="checkbox" id="memory" name="memory">
-            <label class="text-s" for="memory">{{__('login.memory')}}</label>
-            <a class="text-xs ml-auto mr-0 text-blue-500 " href="#">{{__('login.forget_password')}}</a>
+            <label class="text-s" for="memory">{{__('register.memory')}}</label>
         </div>
         <div>
-            <button class="text-xl font-semibold bg-blue-500 text-white p-2 rounded-sm mt-5 w-1/1 hover:bg-sky-800" type="submit">{{__('login.button')}}</button>
+            <button class="text-xl font-semibold bg-blue-500 text-white p-2 rounded-sm mt-5 w-1/1 hover:bg-sky-800" type="submit">{{__('register.button')}}</button>
         </div>
         <div class="flex mt-5 justify-center">
-            <p class="text-xs">{{__('login.no_account_yet')}}<a class="text-blue-500 ml-3" href="{{route('register.store')}}">{{__('login.create_an_account')}}</a></p>
+            <p class="text-xs">{{__('register.already_an_account')}}<a class="text-blue-500 ml-3" href="{{route('login.store')}}">{{__('register.log_in')}}</a></p>
         </div>
     </fieldset>
 </section>
-
 </body>
 </html>
