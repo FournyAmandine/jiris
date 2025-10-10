@@ -2,9 +2,11 @@
 
 use App\Models\Project;
 
+use App\Models\User;
 use function Pest\Laravel\assertDatabaseHas;
 
 it('creates a project and redirects to the project index', function () {
+
     $project = ['name' => 'Client'];
 
     $response = $this->post('/projects', $project);
@@ -43,7 +45,8 @@ it('check if the project dashboard link corresponds to the correct project', fun
 it('validate informations about a new project', function () {
     $project = ['name' => ''];
 
-    $response = $this->post('/project', $project);
+
+    $response = $this->post('/projects', $project);
 
     $response->assertInvalid('name');
 });

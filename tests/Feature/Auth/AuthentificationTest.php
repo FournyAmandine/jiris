@@ -2,6 +2,7 @@
 
 use App\Models\Jiri;
 use App\Models\User;
+use function Pest\Laravel\actingAs;
 
 it('can display the login form', function (){
     //action
@@ -43,6 +44,23 @@ it('verifies if a guest can’t access to the jiris.index and if he redirect to 
 });
 
 it('verifies if the jiris on the dashboard are associated to the current user', function () {
-    $user = User::factory()->create();
+    $user = User::factory()
+        ->has(Jiri::factory()->count(3))
+        ->create();
 
+    $second_user = User::factory()
+        ->has(Jiri::factory()->count(4))
+        ->create();
+
+    actingAs($user);
+
+    $response= $this->get(route('jiris.index'));
+
+    foreach ($user->jiris as $jiri){
+        $response->assertSee($jiri->name);
+    }
+
+    foreach ($second_user->jiris as $jiri){
+        $response->assertDontSee($jiri->name);
+    }
 });

@@ -4,10 +4,15 @@ use App\Enums\ContactRoles;
 use App\Models\Contact;
 use App\Models\Jiri;
 use App\Models\Project;
+use App\Models\User;
+use function Pest\Laravel\actingAs;
 
 it('is possible to retrieve many evaluated/evaluators from a Jiri',
     function (){
+        $user = User::factory()
+            ->create();
         $jiri = Jiri::factory()
+
 
             ->hasAttached(
                 Contact::factory()->count(7),
@@ -20,6 +25,7 @@ it('is possible to retrieve many evaluated/evaluators from a Jiri',
             )
             ->create();
 
+        actingAs($user);
 
             $this->assertDatabaseCount('attendances', 10);
             expect($jiri->evaluators->count())->toBe(3)
@@ -31,11 +37,16 @@ it('is possible to retrieve many evaluated/evaluators from a Jiri',
 
 it('is possible to retrieve many projects from a Jiri',
     function () {
+        $user = User::factory()
+            ->create();
         $jiri = Jiri::factory()
             ->hasAttached(
                 Project::factory()->count(4),
             )
             ->create();
+
+        actingAs($user);
+
 
             $this->assertDatabaseCount('homeworks', 4);
             expect($jiri->projects->count())->toBe(4);
@@ -44,6 +55,8 @@ it('is possible to retrieve many projects from a Jiri',
 
 it('is possible to retrieve many implementations from an evaluated attending a Jiri',
     function () {
+        $user = User::factory()
+            ->create();
         $jiri = Jiri::factory()
             ->hasAttached(
                 Contact::factory()->count(1),
@@ -53,6 +66,8 @@ it('is possible to retrieve many implementations from an evaluated attending a J
                 Project::factory()->count(3)
             )
             ->create();
+
+        actingAs($user);
 
         $contact = $jiri->evaluated->first();
         $homeworks = $jiri->homeworks;

@@ -8,6 +8,10 @@ class ContactController extends Controller
 {
     public function store()
     {
+        $validated = request()->validate([
+            'name' => 'required',
+            'email' => 'required|email',
+        ]);
         Contact::create(request()->all());
 
         return redirect(route('contacts.index'));
@@ -15,10 +19,7 @@ class ContactController extends Controller
 
     public function index()
     {
-        $validated = request()->validate([
-            'name' => 'required',
-            'email' => 'required|email',
-        ]);
+
         $contacts = Contact::all();
 
         return view('contacts.index', compact('contacts'));

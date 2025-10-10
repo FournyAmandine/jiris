@@ -2,13 +2,19 @@
 
 use App\Models\Jiri;
 
+use App\Models\User;
+use function Pest\Laravel\actingAs;
 use function Pest\Laravel\post;
 
 it('redirects to the jiri index route after the successful creation of a Jiri', function () {
 
     // Arrange
+    $user = User::factory()
+        ->create();
+
     $jiri = Jiri::factory()->raw();
 
+    actingAs($user);
     // Act
     $response = post(route('jiris.store'), $jiri);
 
@@ -18,7 +24,11 @@ it('redirects to the jiri index route after the successful creation of a Jiri', 
 });
 
 it('display a complete list of jiris on the jiri index page', function () {
+    $user = User::factory()
+        ->create();
     $jiris = Jiri::factory(4)->create();
+
+    actingAs($user);
 
     $response = $this->get('/jiris');
 
@@ -33,7 +43,11 @@ it('display a complete list of jiris on the jiri index page', function () {
 
 it('check if the jiri dashboard link corresponds to the correct jiri', function () {
     // Arrange
+    $user = User::factory()
+        ->create();
     $jiri = Jiri::factory()->create();
+
+    actingAs($user);
 
     // Act
     $response = $this->get('/jiris/'.$jiri->id);
@@ -45,7 +59,11 @@ it('check if the jiri dashboard link corresponds to the correct jiri', function 
 });
 
 it('validate informations about a new jiri', function () {
+    $user = User::factory()
+        ->create();
     $jiri = ['name' => '', 'date' => ''];
+
+    actingAs($user);
 
     $response = $this->post('/jiris', $jiri);
 

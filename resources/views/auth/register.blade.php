@@ -27,7 +27,6 @@
     <form action="{{route('register.store')}}" method="post">
         @csrf
         <p class="text-red-600 text-xs mb-3">{{__('register.fields_are_required')}}</p>
-    </form>
     <fieldset>
         <div  class="flex flex-col flex-1 mb-4">
             <label for="name">{{__('register.name')}}<small class="text-red-600 ml-1">*</small></label>
@@ -68,6 +67,8 @@
             <p class="text-xs">{{__('register.already_an_account')}}<a class="text-blue-500 ml-3" href="{{route('login.store')}}">{{__('register.log_in')}}</a></p>
         </div>
     </fieldset>
+    </form>
+
 </section>
 </body>
 </html>

@@ -8,6 +8,7 @@ use App\Models\Homework;
 use App\Models\Jiri;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Auth;
 
 class JiriController extends Controller
 {
@@ -23,7 +24,7 @@ class JiriController extends Controller
         ]);
 
 
-        $jiri = Jiri::create($validated_data);
+        $jiri = Jiri::create(array_merge($validated_data, ['user_id'=>Auth::user()->id]));
 
         if (!empty($validated_data['projects'])) {
             $jiri->projects()->attach($validated_data['projects']);
@@ -49,7 +50,7 @@ class JiriController extends Controller
 
     public function index()
     {
-        $jiris = Jiri::all();
+        $jiris = Auth::user()->jiris;
 
         return view('jiris.index', compact('jiris'));
     }

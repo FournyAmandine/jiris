@@ -41,7 +41,7 @@ it('check if the contact dashboard link corresponds to the correct contact', fun
 
 });
 
-it('validate informations about a new contact', function () {
+it('validate information about a new contact', function () {
     $contact = ['name' => '', 'email' => ''];
 
     $response = $this->post('/contacts', $contact);
