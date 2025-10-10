@@ -46,10 +46,6 @@ class FortifyServiceProvider extends ServiceProvider
             return Limit::perMinute(5)->by($request->session()->get('login.id'));
         });
 
-        RedirectIfAuthenticated::redirectUsing(function (){
-            return route('jiris.index', );
-        });
-
         Fortify::loginView(function () {
 
             return view('auth.login');
@@ -60,6 +56,10 @@ class FortifyServiceProvider extends ServiceProvider
 
             return view('auth.register');
 
+        });
+
+        RedirectIfAuthenticated::redirectUsing(function (){
+            return route('jiris.index', );
         });
     }
 }
