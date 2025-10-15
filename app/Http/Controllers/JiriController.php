@@ -6,6 +6,7 @@ use App\Enums\ContactRoles;
 use App\Models\Contact;
 use App\Models\Homework;
 use App\Models\Jiri;
+use App\Models\Project;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
@@ -57,11 +58,20 @@ class JiriController extends Controller
 
     public function show(Jiri $jiri)
     {
-        return view('jiris.show', compact('jiri'));
+        $contacts = Contact::all();
+        $projects = Project::all();
+        return view('jiris.show', compact('jiri', 'contacts', 'projects'));
     }
 
     public function create()
     {
         return view('jiris.create');
+    }
+
+    public function edit(Jiri $jiri)
+    {
+        $contacts = Contact::all();
+        $projects = Project::all();
+        return view('jiris.edit', compact('jiri', 'contacts', 'projects'));
     }
 }

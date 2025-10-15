@@ -8,7 +8,6 @@
 </head>
 <body class="p-6">
     <h1 class="font-bold text-4xl my-4 text-center flex flex-col mx-auto">{!! __('headings.create_your_jiri') !!}</h1>
-    {{--Faire le formulaire--}}
 
     <form action="{!! route('jiris.store') !!}" method="post" class="max-w-1/2 mx-auto my-10">
         @csrf

@@ -1,0 +1,8 @@
+<?php
+
+return [
+    'register' =>'Créez un compte',
+    'log_in'=>'Se connecter',
+    'modify'=>'Modification du jiri',
+    'list'=>'Liste des jiris'
+];

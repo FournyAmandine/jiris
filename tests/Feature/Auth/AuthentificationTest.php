@@ -13,7 +13,7 @@ it('can display the login form', function (){
     $response->assertSeeInOrder(['<form', 'Entrez votre email', 'Entrez votre mot de passe', '<button', 'Se connecter'], true);
 });
 
-it('verifies if we are redirected to the dashboard after a successful request', function () {
+it('we are redirected to the dashboard after a successful request', function () {
 
     $password = 'amandine';
     $user = User::factory()->create([
@@ -33,7 +33,7 @@ it('verifies if we are redirected to the dashboard after a successful request', 
 
 });
 
-it('verifies if a guest can’t access to the jiris.index and if he redirect to the login page', function () {
+it(' a guest can’t access to the jiris.index and if he redirect to the login page', function () {
 
     //action
     $response = $this->get(route('jiris.index'));
@@ -43,7 +43,7 @@ it('verifies if a guest can’t access to the jiris.index and if he redirect to 
     $response->assertRedirect(route('login'));
 });
 
-it('verifies if the jiris on the dashboard are associated to the current user', function () {
+it('the jiris on the dashboard are associated to the current user', function () {
     $user = User::factory()
         ->has(Jiri::factory()->count(3))
         ->create();
@@ -63,4 +63,18 @@ it('verifies if the jiris on the dashboard are associated to the current user', 
     foreach ($second_user->jiris as $jiri){
         $response->assertDontSee($jiri->name);
     }
+});
+
+it('the user is successfully taken to the jiris.edit view', function () {
+    $user = User::factory()->create();
+
+    $jiri = Jiri::factory()->create();
+
+    actingAs($user);
+
+    $response = $this->get(route('jiris.edit', $jiri->id));
+
+    $response->assertStatus(200);
+    $response->assertViewIs('jiris.edit');
+    $response->assertSee('Modifiez votre jiri');
 });

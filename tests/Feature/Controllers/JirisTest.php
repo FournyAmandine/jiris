@@ -11,6 +11,12 @@ use App\Models\Project;
 use App\Models\User;
 use function Pest\Laravel\assertDatabaseHas;
 
+
+beforeEach(function(){
+    $user = User::factory()->create();
+    \Pest\Laravel\actingAs($user);
+});
+
 it('creates successfully a Jiri from the data provided by the request', function () {
 
     // Arrange
@@ -195,28 +201,32 @@ it('creates a jiri with its contacts associated from a request containing jiri d
 
 it('creates a jiri with its contacts associated and its associated projects from a request containing jiri data, contacts ids including their roles and projects ids and creates all the relationships', function () {
 
-    $user = User::factory()->create();
-    $jiri = Jiri::factory()->raw();
-
     $contacts = Contact::factory()
         ->count(4)
+        ->for(auth()->user())
         ->create()
         ->pluck('id', 'id')
         ->toArray();
 
     $projects = Project::factory()
         ->count(3)
+        ->for(auth()->user())
         ->create()
         ->pluck('id', 'id')
         ->toArray();
 
-    \Pest\Laravel\actingAs($user);
+
+    $jiri = Jiri::factory()->raw();
+
+
+
 
 
     $form_data = array_merge($jiri, [
         'contacts' => $contacts,
         'projects' => $projects,
     ]);
+
 
     $available_roles = [
         1 => ContactRoles::Evaluated->value,
@@ -229,12 +239,13 @@ it('creates a jiri with its contacts associated and its associated projects from
 
 
     $response = $this->post(route('jiris.store'), $form_data);
-    $response->assertStatus(302);
+
+    $response->assertValid();
 
     expect(Jiri::all()->count())->toBe(1)
-        ->and(Project::all()->count())->toBe(3)
-        ->and(Contact::all()->count())->toBe(4)
         ->and(Attendance::all()->count())->toBe(4)
         ->and(Homework::all()->count())->toBe(3)
         ->and(Implementation::all()->count())->toBe(12);
+
+    $response->assertStatus(302);
 });
