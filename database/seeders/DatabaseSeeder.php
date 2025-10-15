@@ -24,7 +24,7 @@ class DatabaseSeeder extends Seeder
             'email' => 'test@example.com',
         ]);
 
-        User::factory()->create([
+        $user = User::factory()->create([
             'name' => 'Amandine Fourny',
             'email' => 'amandine.fourny@gmail.com',
             'password' => password_hash('amandine', PASSWORD_BCRYPT),
@@ -44,38 +44,22 @@ class DatabaseSeeder extends Seeder
             'user_id' => rand(1, count(User::all())),
         ]);
 
-        Jiri::factory()->count(5)->create(
-            [
-                'user_id' => rand(1, count(User::all()))
-            ]
-        );
+        Jiri::factory()->count(5)->for($user)->create();
 
-        Contact::factory()->count(5)->create(
-            [
-                'user_id' => rand(1, count(User::all()))
-            ]
-        );
+        Contact::factory()->count(5)->for($user)->create();
 
-        Project::factory()->create([
+        Project::factory()->for($user)->create([
             'name' => 'CV',
-            'user_id' => rand(1, count(User::all()))
-
         ]);
 
-        Project::factory()->create([
+        Project::factory()->for($user)->create([
             'name' => 'Projet Client',
-            'user_id' => rand(1, count(User::all()))
         ]);
 
-        Project::factory()->create([
+        Project::factory()->for($user)->create([
             'name' => 'Portfolio',
-            'user_id' => rand(1, count(User::all()))
         ]);
 
-        Project::factory()->count(5)->create(
-            [
-                'user_id' => rand(1, count(User::all()))
-            ]
-        );
+        Project::factory()->count(5)->for($user)->create();
     }
 }

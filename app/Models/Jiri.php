@@ -13,7 +13,9 @@ class Jiri extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'date', 'user_id'];
+    protected $fillable = ['name', 'date',
+        'user_id'
+    ];
 
     public $timestamps = false;
 
@@ -45,7 +47,7 @@ class Jiri extends Model
         return $this->hasMany(Homework::class);
     }
 
-    public function users():BelongsTo
+    public function user():BelongsTo
     {
         return $this->belongsTo(User::class);
     }

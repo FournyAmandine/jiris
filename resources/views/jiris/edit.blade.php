@@ -34,7 +34,7 @@
                 @error('name')
                 <p class="text-red-500">{!! $message !!}</p>
                 @enderror
-                <input type="text" name="name" id="name" value="{{$jiri->name}}" class="border-2 rounded-lg p-2 bg-white" placeholder="Design Web">
+                <input type="text" name="name" id="name" value="{{$jiri->name}}" class="border-2 rounded-lg p-2 bg-white" >
             </div>
             <div class="flex flex-col my-5">
                 <label for="date">Date <small>(Requis)</small></label>

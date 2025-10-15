@@ -219,9 +219,6 @@ it('creates a jiri with its contacts associated and its associated projects from
     $jiri = Jiri::factory()->raw();
 
 
-
-
-
     $form_data = array_merge($jiri, [
         'contacts' => $contacts,
         'projects' => $projects,
