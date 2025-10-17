@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreContactRequest;
+use App\Jobs\ProcessUploadedContactAvatar;
 use App\Models\Contact;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Laravel\Facades\Image;
 
@@ -18,14 +20,21 @@ class ContactController extends Controller
     {
         $validated = $request->validated();
 
-        if ($request->hasFile('avatar')){
-            $image = Image::read($validated['avatar'])
-            ->cover(300, 300)
-            ->toJpeg(80);
-            $file_name = 'contact_'.uniqid().'_300X300.jpg';
-            $path = "contacts/$file_name";
-            Storage::disk('public')->put($path, $image->toString());
-            $validated['avatar'] = $path;
+        if ($validated['avatar']){
+            $new_original_file_name = uniqid().'.'.config('contactsavatars.avatar_extension');
+            $full_path_to_original = Storage::putFileAs(config('contactsavatars.original_path'),
+                    $validated['avatar'],
+                    $new_original_file_name,
+                );
+
+            if ($full_path_to_original){
+                $validated['avatar'] = $new_original_file_name;
+
+                ProcessUploadedContactAvatar::dispatch($full_path_to_original, $new_original_file_name);
+            }
+            else{
+                $validated['avatar'] ='';
+            }
         }
 
         $contact = auth()->user()->contacts()->create($validated);
@@ -58,9 +67,23 @@ class ContactController extends Controller
         return view('contacts.edit', compact('contact'));
     }
 
-    public function update(Contact $contact)
+    public function update(Contact $contact, StoreContactRequest $request)
     {
+
+        $validated = $request->validated();
+
+
         $this->authorize('update', $contact);
+
+        Contact::upsert([
+            [
+                'name'=>$validated['name'],
+                'email'=>$validated['email']
+            ]
+        ], 'email',
+        ['name', 'email']);
+
+        return redirect(route('contacts.show', $contact->id));
 
     }
 }

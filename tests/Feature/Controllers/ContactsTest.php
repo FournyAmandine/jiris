@@ -7,6 +7,7 @@ use function Pest\Laravel\actingAs;
 use function Pest\Laravel\assertDatabaseHas;
 use \Illuminate\Support\Facades\Storage;
 use  \Intervention\Image\Laravel\Facades\Image;
+use function Pest\Laravel\assertDatabaseMissing;
 
 it('creates a contact and redirects to the contact show', function () {
 
@@ -130,5 +131,27 @@ it('verifies if the user can’t modifies an other contact', function () {
 
 
 it('verifies if the user can modified his contact and if it is correctly saved in the database', function () {
+    $user = User::factory()->create();
+    actingAs($user);
+
+    $contact = Contact::factory()->for(auth()->user())->create();
+
+    $new_contact = [
+        'name' => 'Victoria',
+        'email' => 'vi.be@gmail.com',
+    ];
+
+    $response = $this->patch(route('contacts.update', $contact->id), $new_contact);
+
+    assertDatabaseMissing('contacts', [
+        'name' =>$contact['name'],
+        'email' => $contact['email'],
+    ]);
+
+    assertDatabaseHas('contacts', [
+        'name' =>$new_contact['name'],
+        'email' => $new_contact['email'],
+    ]);
+
 
 });

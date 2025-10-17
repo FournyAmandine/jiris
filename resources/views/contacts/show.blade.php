@@ -15,7 +15,7 @@
     @isset($contact->avatar)
     <section class="mb-15 shadow-2xl p-10 rounded-2xl flex items-center">
         <h2 class="text-2xl font-medium">Avatar :</h2>
-        <img class="pl-10" src="{!!  asset('storage/'.$contact->avatar)!!}" alt="Avatar du contact {{$contact->name}}">
+        <img class="pl-10" src="{!!  asset('storage/images/contacts/variants/300x300/'.$contact->avatar)!!}" alt="Avatar du contact {{$contact->name}}">
     </section>
     @endisset
     <div class="flex justify-end">
