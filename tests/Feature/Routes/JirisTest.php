@@ -11,10 +11,13 @@ it('redirects to the jiri index route after the successful creation of a Jiri', 
     // Arrange
     $user = User::factory()
         ->create();
-
-    $jiri = Jiri::factory()->raw();
-
     actingAs($user);
+
+
+    $jiri = Jiri::factory()
+        ->for(auth()->user())
+        ->raw();
+
     // Act
     $response = post(route('jiris.store'), $jiri);
 
@@ -26,9 +29,12 @@ it('redirects to the jiri index route after the successful creation of a Jiri', 
 it('display a complete list of jiris on the jiri index page', function () {
     $user = User::factory()
         ->create();
-    $jiris = Jiri::factory(4)->create();
-
     actingAs($user);
+
+    $jiris = Jiri::factory(4)
+        ->for(auth()->user())
+        ->create();
+
 
     $response = $this->get('/jiris');
 
@@ -45,9 +51,12 @@ it('check if the jiri dashboard link corresponds to the correct jiri', function 
     // Arrange
     $user = User::factory()
         ->create();
-    $jiri = Jiri::factory()->create();
-
     actingAs($user);
+
+    $jiri = Jiri::factory()
+        ->for(auth()->user())
+        ->create();
+
 
     // Act
     $response = $this->get('/jiris/'.$jiri->id);

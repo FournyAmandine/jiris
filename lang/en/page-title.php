@@ -6,4 +6,5 @@ return [
  'modify'=>'Modification of the jiri',
     'list'=>'List of jiris',
     'modify_contact' => 'Modification of the contact',
+    'list_contacts'=>'Liste of contacts',
 ];

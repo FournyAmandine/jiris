@@ -15,7 +15,7 @@ it(
 
         $response = get(route('contacts.create'));
 
-        $response->assertSee("<h1 class=\"font-bold text-4xl my-4 text-center flex flex-col mx-auto\">$main_heading</h1>", false);
+        $response->assertSee("<h1 class=\"font-bold text-4xl my-15 text-center flex flex-col mx-auto\">$main_heading</h1>", false);
     }
 )->with([
     ['fr', 'Créez un contact'],

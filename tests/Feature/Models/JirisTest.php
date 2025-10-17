@@ -7,25 +7,29 @@ use App\Models\Project;
 use App\Models\User;
 use function Pest\Laravel\actingAs;
 
-it('is possible to retrieve many evaluated/evaluators from a Jiri',
+it(
+    'is possible to retrieve many evaluated/evaluators from a Jiri',
     function (){
-        $user = User::factory()
-            ->create();
+        $user = User::factory()->create();
+
+        $contact1 = Contact::factory()->for($user)->count(7)->create();
+        $contact2 = Contact::factory()->for($user)->count(3);
+
+        actingAs($user);
+
         $jiri = Jiri::factory()
-
-
             ->hasAttached(
-                Contact::factory()->count(7),
+                $contact1,
                 ['role' => ContactRoles::Evaluated->value]
             )
 
             ->hasAttached(
-                Contact::factory()->count(3),
+                $contact2,
                 ['role' => ContactRoles::Evaluators->value]
             )
+            ->for($user)
             ->create();
 
-        actingAs($user);
 
             $this->assertDatabaseCount('attendances', 10);
             expect($jiri->evaluators->count())->toBe(3)
@@ -37,15 +41,20 @@ it('is possible to retrieve many evaluated/evaluators from a Jiri',
 
 it('is possible to retrieve many projects from a Jiri',
     function () {
-        $user = User::factory()
-            ->create();
+        $user = User::factory()->create();
+        actingAs($user);
+
+        $project = Project::factory()->for($user)->count(4);
+
+
         $jiri = Jiri::factory()
+
             ->hasAttached(
-                Project::factory()->count(4),
+                $project
             )
+            ->for(auth()->user())
             ->create();
 
-        actingAs($user);
 
 
             $this->assertDatabaseCount('homeworks', 4);
@@ -57,17 +66,22 @@ it('is possible to retrieve many implementations from an evaluated attending a J
     function () {
         $user = User::factory()
             ->create();
+        actingAs($user);
+
+        $contact = Contact::factory()->for($user)->count(1);
+        $project = Project::factory()->for($user)->count(3);
+
         $jiri = Jiri::factory()
             ->hasAttached(
-                Contact::factory()->count(1),
+                $contact,
                 ['role' => ContactRoles::Evaluated->value]
             )
             ->hasAttached(
-                Project::factory()->count(3)
+                $project
             )
+            ->for($user)
             ->create();
 
-        actingAs($user);
 
         $contact = $jiri->evaluated->first();
         $homeworks = $jiri->homeworks;

@@ -2,25 +2,29 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreContactRequest;
 use App\Models\Contact;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Laravel\Facades\Image;
 
 class ContactController extends Controller
 {
-    public function store(Request $request)
+    use AuthorizesRequests;
+
+    public function store(StoreContactRequest $request)
     {
-        $validated = request()->validate([
-            'name' => 'required',
-            'email' => 'required|email',
-            'avatar'=> 'nullable|image',
-        ]);
+        $validated = $request->validated();
 
         if ($request->hasFile('avatar')){
-            $path = Storage::disk('public')->putFile('contacts', $request->file('avatar'));
-            //$file_name = uniqid('contact_').'.jpg';
-            //$path = "contact/$file_name";
+            $image = Image::read($validated['avatar'])
+            ->cover(300, 300)
+            ->toJpeg(80);
+            $file_name = 'contact_'.uniqid().'_300X300.jpg';
+            $path = "contacts/$file_name";
+            Storage::disk('public')->put($path, $image->toString());
             $validated['avatar'] = $path;
         }
 
@@ -52,5 +56,11 @@ class ContactController extends Controller
     public function edit(Contact $contact)
     {
         return view('contacts.edit', compact('contact'));
+    }
+
+    public function update(Contact $contact)
+    {
+        $this->authorize('update', $contact);
+
     }
 }

@@ -5,5 +5,7 @@ return [
     'log_in'=>'Se connecter',
     'modify'=>'Modification du jiri',
     'list'=>'Liste des jiris',
-    'modify_contact'=>'Modification du contact'
+    'modify_contact'=>'Modification du contact',
+    'list_contacts'=>'Liste des contacts',
+
 ];

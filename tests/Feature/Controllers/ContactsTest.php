@@ -5,6 +5,8 @@ use App\Models\Contact;
 use App\Models\User;
 use function Pest\Laravel\actingAs;
 use function Pest\Laravel\assertDatabaseHas;
+use \Illuminate\Support\Facades\Storage;
+use  \Intervention\Image\Laravel\Facades\Image;
 
 it('creates a contact and redirects to the contact show', function () {
 
@@ -12,7 +14,7 @@ it('creates a contact and redirects to the contact show', function () {
 
     \Pest\Laravel\actingAs($user);
 
-    \Illuminate\Support\Facades\Storage::fake('public');
+    Storage::fake('public');
 
     $avatar = \Illuminate\Http\UploadedFile::fake()->image('photo.jpg');
 
@@ -25,19 +27,27 @@ it('creates a contact and redirects to the contact show', function () {
     $response = $this->post(route('contacts.store'), $contact);
 
     $contact = Contact::first();
-    \Illuminate\Support\Facades\Storage::disk('public')->assertExists($contact->avatar);
+    Storage::disk('public')->assertExists($contact->avatar);
     $response->assertStatus(302);
+
+    $image = Image::read(Storage::disk('public')->get($contact->avatar));
+
+    expect($image->width())
+        ->toBeLessThanOrEqual(300)
+        ->and($image->height())
+        ->toBeLessThanOrEqual(300);
+
     $response->assertRedirect(route('contacts.show', compact('contact')));
     assertDatabaseHas('contacts', ['name' => 'Victoria Briol']);
 });
 
-
-
-
-
-
 it('display a complete list of contacts on the contact index page', function () {
-    $contacts = Contact::factory(4)->create();
+    $user = User::factory()->create();
+    actingAs($user);
+
+    $contacts = Contact::factory(4)
+        ->for(auth()->user())
+        ->create();
 
     $response = $this->get('/contacts');
 
@@ -51,17 +61,25 @@ it('display a complete list of contacts on the contact index page', function () 
 });
 
 it('check if the contact dashboard link corresponds to the correct contact', function () {
-    $contact = Contact::factory()->create();
+    $user = User::factory()->create();
+    actingAs($user);
+
+    $contact = Contact::factory()
+        ->for(auth()->user())
+        ->create();
 
     $response = $this->get('contacts/'.$contact->id);
 
     $response->assertStatus(200);
     $response->assertViewIs('contacts.show');
-    $response->assertSee('Récapitulatif du contact : '.$contact->name);
+    $response->assertSee($contact->name);
 
 });
 
 it('validate information about a new contact', function () {
+    $user = User::factory()->create();
+    actingAs($user);
+
     $contact = ['name' => '', 'email' => ''];
 
     $response = $this->post('/contacts', $contact);
@@ -69,8 +87,6 @@ it('validate information about a new contact', function () {
     $response->assertInvalid('name');
     $response->assertInvalid('email');
 });
-
-
 
 it('the user is successfully taken to the contacts.show view', function () {
     $user = User::factory()->create();
@@ -86,7 +102,6 @@ it('the user is successfully taken to the contacts.show view', function () {
     $response->assertSee($contact->name);
 });
 
-
 it('the contacts.edit view exists', function () {
     $user = User::factory()->create();
     actingAs($user);
@@ -99,4 +114,21 @@ it('the contacts.edit view exists', function () {
     $response->assertStatus(200);
     $response->assertViewIs('contacts.edit');
     $response->assertSee('Modifiez votre contact');
+});
+
+it('verifies if the user can’t modifies an other contact', function () {
+    $user = User::factory()->create();
+    actingAs($user);
+
+    $contact = Contact::factory()->for($user)->create();
+
+    $response = $this->patch(route('contacts.update', $contact));
+
+    $response->assertStatus(403);
+
+});
+
+
+it('verifies if the user can modified his contact and if it is correctly saved in the database', function () {
+
 });
