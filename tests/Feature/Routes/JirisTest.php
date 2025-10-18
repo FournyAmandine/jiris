@@ -6,7 +6,7 @@ use App\Models\User;
 use function Pest\Laravel\actingAs;
 use function Pest\Laravel\post;
 
-it('redirects to the jiri index route after the successful creation of a Jiri', function () {
+it('redirects to the jiri show route after the successful creation of a Jiri', function () {
 
     // Arrange
     $user = User::factory()
@@ -20,10 +20,10 @@ it('redirects to the jiri index route after the successful creation of a Jiri', 
 
     // Act
     $response = post(route('jiris.store'), $jiri);
-
+    $jiri = Jiri::first();
     // Assert
     $response->assertStatus(302);
-    $response->assertRedirect('/jiris');
+    $response->assertRedirect(route('jiris.show', $jiri->id));
 });
 
 it('display a complete list of jiris on the jiri index page', function () {

@@ -67,7 +67,7 @@ class ContactController extends Controller
         return view('contacts.edit', compact('contact'));
     }
 
-    public function update(Contact $contact, StoreContactRequest $request)
+   /* public function update(Contact $contact, StoreContactRequest $request)
     {
 
         $validated = $request->validated();
@@ -80,10 +80,21 @@ class ContactController extends Controller
                 'name'=>$validated['name'],
                 'email'=>$validated['email']
             ]
-        ], 'email',
+        ], 'id',
         ['name', 'email']);
 
         return redirect(route('contacts.show', $contact->id));
 
+    }*/
+    public function update(Contact $contact, StoreContactRequest $request)
+    {
+        $validated = $request->validated();
+
+        $this->authorize('update', $contact);
+
+        $contact->update($validated);
+
+        return redirect()->route('contacts.show', $contact->id);
     }
+
 }

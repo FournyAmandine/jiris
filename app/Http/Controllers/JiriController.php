@@ -46,7 +46,7 @@ class JiriController extends Controller
 
 
 
-        return redirect(route('jiris.show'));
+        return redirect(route('jiris.show', $jiri->id));
     }
 
     public function index()

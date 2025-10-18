@@ -54,7 +54,7 @@ it('display a complete list of contacts on the contact index page', function () 
 
     $response->assertStatus(200);
     $response->assertViewIs('contacts.index');
-    $response->assertSee('Liste des contacts');
+    $response->assertSee('Mes contacts');
 
     foreach ($contacts as $contact) {
         $response->assertSee($contact['name'], ['email']);
@@ -144,8 +144,8 @@ it('verifies if the user can modified his contact and if it is correctly saved i
     $response = $this->patch(route('contacts.update', $contact->id), $new_contact);
 
     assertDatabaseMissing('contacts', [
-        'name' =>$contact['name'],
-        'email' => $contact['email'],
+        'name' =>$contact->name,
+        'email' => $contact->email,
     ]);
 
     assertDatabaseHas('contacts', [

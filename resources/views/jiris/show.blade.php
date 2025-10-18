@@ -31,10 +31,12 @@
         <h2 class="text-2xl font-medium">Date :</h2>
         <p class="text-m ml-5 mt-1">{{$jiri->date}}</p>
     </section>
-    <section class="mb-15 shadow-2xl p-10 rounded-2xl">
-        <h2 class="text-2xl font-medium">Description :</h2>
-        <p class="text-m ml-5 mt-1">{{$jiri->description}}</p>
+    @isset($jiri->description)
+    <section class="mb-15 shadow-2xl p-10 rounded-2xl flex">
+        <h2 class="text-2xl font-medium ">Description&nbsp;:</h2>
+        <p class="text-m ml-5 mt-1 ">{{$jiri->description}}</p>
     </section>
+    @endisset
     <section class="mb-15 shadow-2xl p-10 rounded-2xl">
         <h2 class="text-2xl font-medium">Contacts :</h2>
     </section>

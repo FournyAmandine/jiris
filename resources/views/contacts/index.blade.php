@@ -25,7 +25,7 @@
 		c0,17.055,7.112,29.842,7.112,29.842c-10.379,19.69-6.378,58.951-3.446,78.809c-1.704-0.03-22.602,0.188-13.728,31.258
 		C152.405,196.99,159.338,203.934,171.501,208.271z"/>
         </g>
-        <h1 class="text-4xl ml-5 font-bold">Liste des contacts</h1>
+        <h1 class="text-4xl ml-5 font-bold">Mes contacts</h1>
     </svg>
 </header>
 
@@ -38,7 +38,7 @@
                 <p>{{$contact->name}}</p>
             </div>
             @isset($contact->avatar)
-            <img src="{!!  asset('storage/'.$contact->avatar)!!}" alt="Avatar de : {{$contact->name}}">
+            <img src="{!!  asset('storage/images/contacts/variants/300x300/'.$contact->avatar)!!}" alt="Avatar de : {{$contact->name}}">
             @endisset
         </div>
 

@@ -104,7 +104,7 @@ it('display a complete list of jiris on the jiri index page', function () {
 
     $response->assertStatus(200);
     $response->assertViewIs('jiris.index');
-    $response->assertSee('Liste des jiris');
+    $response->assertSee('Mes jiris');
 
     foreach ($jiris as $jiri) {
         $response->assertSee($jiri['name']);
