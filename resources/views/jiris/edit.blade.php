@@ -26,6 +26,7 @@
 
 </div>
     <form action="{!! route('jiris.store') !!}" method="post" class="max-w-1/2 mx-auto my-10">
+        @method('PATCH')
         @csrf
         <fieldset class="border-2 p-5 rounded-lg shadow-2xl bg-gray-50">
             <legend class="text-2xl p-2">Informations générales</legend>
@@ -34,7 +35,7 @@
                 @error('name')
                 <p class="text-red-500">{!! $message !!}</p>
                 @enderror
-                <input type="text" name="name" id="name" value="{{$jiri->name}}" class="border-2 rounded-lg p-2 bg-white" placeholder="Design Web">
+                <input type="text" name="name" id="name" value="{{$jiri->name}}" class="border-2 rounded-lg p-2 bg-white" >
             </div>
             <div class="flex flex-col my-5">
                 <label for="date">Date <small>(Requis)</small></label>

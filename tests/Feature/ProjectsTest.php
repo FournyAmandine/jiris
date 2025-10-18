@@ -3,20 +3,34 @@
 use App\Models\Project;
 
 use App\Models\User;
+use function Pest\Laravel\actingAs;
 use function Pest\Laravel\assertDatabaseHas;
 
 it('creates a project and redirects to the project index', function () {
+    $user = User::factory()->create();
+    actingAs($user);
 
-    $project = ['name' => 'Client'];
+    $project = Project::factory()
+        ->for($user)
+        ->make()
+        ->toArray();
+
 
     $response = $this->post('/projects', $project);
+
     $response->assertStatus(302);
-    $response->assertRedirect('/projects');
-    assertDatabaseHas('projects', ['name' => 'Client']);
+    $response->assertRedirect(route('projects.index'));
+
+    assertDatabaseHas('projects',
+        [
+            'name' => $project['name'],
+        ]);
 });
 
 it('display a complete list of projects on the contact index page', function () {
-    $projects = Project::factory(4)->create();
+    $user = User::factory()->create();
+    actingAs($user);
+    $projects = Project::factory(4)->for($user)->create();
 
     $response = $this->get('/projects');
 
@@ -31,7 +45,9 @@ it('display a complete list of projects on the contact index page', function () 
 
 it('check if the project dashboard link corresponds to the correct project', function () {
     // Arrange
-    $project = Project::factory()->create();
+    $user = User::factory()->create();
+    actingAs($user);
+    $project = Project::factory()->for($user)->create();
 
     // Act
     $response = $this->get('/projects/'.$project->id);

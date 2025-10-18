@@ -16,7 +16,7 @@ Route::resource('jiris', App\Http\Controllers\JiriController::class)->middleware
 /*Route::get('/contacts', [ContactController::class, 'index'])->name('contacts.index');
 Route::post('/contacts', [ContactController::class, 'store']);
 Route::get('/contacts/{contact}', [ContactController::class, 'show']);*/
-Route::resource('contacts', App\Http\Controllers\ContactController::class);
+Route::resource('contacts', App\Http\Controllers\ContactController::class)->middleware('auth');
 
 /*
 Route::get('/projects', [ProjectController::class, 'index'])->name('projects.index');

@@ -33,7 +33,7 @@ it('we are redirected to the dashboard after a successful request', function () 
 
 });
 
-it(' a guest can’t access to the jiris.index and if he redirect to the login page', function () {
+it('a guest can’t access to the jiris.index and if he redirect to the login page', function () {
 
     //action
     $response = $this->get(route('jiris.index'));
@@ -67,14 +67,25 @@ it('the jiris on the dashboard are associated to the current user', function () 
 
 it('the user is successfully taken to the jiris.edit view', function () {
     $user = User::factory()->create();
-
-    $jiri = Jiri::factory()->create();
-
     actingAs($user);
+
+
+    $jiri = Jiri::factory()->for(auth()->user())->create();
+
 
     $response = $this->get(route('jiris.edit', $jiri->id));
 
     $response->assertStatus(200);
     $response->assertViewIs('jiris.edit');
     $response->assertSee('Modifiez votre jiri');
+});
+
+it(' a guest can’t access to the contacts.index and if he redirect to the login page', function () {
+
+    //action
+    $response = $this->get(route('contacts.index'));
+
+    //assert
+    $response->assertStatus(302);
+    $response->assertRedirect(route('login'));
 });

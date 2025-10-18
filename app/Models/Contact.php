@@ -12,7 +12,7 @@ class Contact extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'email', 'user_id'];
+    protected $fillable = ['name', 'email', 'avatar'];
 
     public function homeworks():BelongsToMany
     {

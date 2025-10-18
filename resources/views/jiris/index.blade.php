@@ -22,7 +22,7 @@
 		C278.145,344.44,267.25,346.831,256,346.831z"/>
         </g>
 </svg>
-    <h1 class="text-4xl ml-5 font-bold">Liste des jiris</h1>
+    <h1 class="text-4xl ml-5 font-bold">Mes jiris</h1>
 </div>
 
 @foreach($jiris as $jiri)

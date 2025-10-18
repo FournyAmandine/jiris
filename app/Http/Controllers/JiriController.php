@@ -46,7 +46,7 @@ class JiriController extends Controller
 
 
 
-        return redirect(route('jiris.index'));
+        return redirect(route('jiris.show', $jiri->id));
     }
 
     public function index()
@@ -63,9 +63,11 @@ class JiriController extends Controller
         return view('jiris.show', compact('jiri', 'contacts', 'projects'));
     }
 
-    public function create()
+    public function create(Jiri $jiri)
     {
-        return view('jiris.create');
+        $contacts = Contact::all();
+        $projects = Project::all();
+        return view('jiris.create', compact('jiri', 'contacts', 'projects'));
     }
 
     public function edit(Jiri $jiri)

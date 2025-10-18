@@ -72,7 +72,6 @@ it(
     }
 );
 
-
 it(
     'fails to create a new jiri in database when the date has the wrong format in the request',
     function () {
@@ -94,15 +93,18 @@ it(
 
 it('display a complete list of jiris on the jiri index page', function () {
     $user = User::factory()->create();
-    $jiris = Jiri::factory(4)->create();
-
     \Pest\Laravel\actingAs($user);
+
+    $jiris = Jiri::factory(4)
+        ->for(auth()->user())
+        ->create();
+
 
     $response = $this->get('/jiris');
 
     $response->assertStatus(200);
     $response->assertViewIs('jiris.index');
-    $response->assertSee('Liste des jiris');
+    $response->assertSee('Mes jiris');
 
     foreach ($jiris as $jiri) {
         $response->assertSee($jiri['name']);
@@ -112,9 +114,12 @@ it('display a complete list of jiris on the jiri index page', function () {
 it('check if the jiri dashboard link corresponds to the correct jiri', function () {
     // Arrange
     $user = User::factory()->create();
-    $jiri = Jiri::factory()->create();
-
     \Pest\Laravel\actingAs($user);
+
+    $jiri = Jiri::factory()
+        ->for(auth()->user())
+        ->create();
+
 
     // Act
     $response = $this->get('/jiris/' . $jiri->id);
@@ -142,14 +147,16 @@ it('creates a jiri with its projects associated from a request containing jiri d
 ,function(){
     // Homeworks
         $user = User::factory()->create();
+        \Pest\Laravel\actingAs($user);
         $jiri = Jiri::factory()->raw();
         $projects = Project::factory()
             ->count(2)
+            ->for(auth()->user())
             ->create()
             ->pluck('id', 'id')
             ->toArray();
 
-        \Pest\Laravel\actingAs($user);
+
 
         $form_data = array_merge($jiri,
             [
@@ -166,14 +173,16 @@ it('creates a jiri with its contacts associated from a request containing jiri d
     ,function(){
     // Attendances
         $user = User::factory()->create();
+        \Pest\Laravel\actingAs($user);
+
         $jiri = Jiri::factory()->raw();
         $contacts = Contact::factory()
             ->count(2)
+            ->for(auth()->user())
             ->create()
             ->pluck('id', 'id')
             ->toArray();
 
-        \Pest\Laravel\actingAs($user);
 
         $form_data = array_merge($jiri, [
             'contacts' => $contacts
@@ -198,7 +207,6 @@ it('creates a jiri with its contacts associated from a request containing jiri d
         expect(Attendance::all()->count())->toBe(2);
     });
 
-
 it('creates a jiri with its contacts associated and its associated projects from a request containing jiri data, contacts ids including their roles and projects ids and creates all the relationships', function () {
 
     $contacts = Contact::factory()
@@ -217,9 +225,6 @@ it('creates a jiri with its contacts associated and its associated projects from
 
 
     $jiri = Jiri::factory()->raw();
-
-
-
 
 
     $form_data = array_merge($jiri, [
