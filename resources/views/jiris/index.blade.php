@@ -26,7 +26,7 @@
 </div>
 
 @foreach($jiris as $jiri)
-    <div class="relative shadow-2xl rounded-2xl mb-8 flex">
+    <div class="relative shadow-2xl rounded-2xl mb-8 flex hover:scale-105">
         <a class="absolute top-0 left-0 right-0 bottom-0 w-1/1 inline-block hover:text-blue-800 text-lg"
            href="{{route('jiris.show', $jiri->id)}}"></a>
         <div class="p-15">
