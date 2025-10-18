@@ -26,7 +26,7 @@ it('creates successfully a Jiri from the data provided by the request', function
     \Pest\Laravel\actingAs($user);
 
     // Act
-    $response = $this->post('/jiris', $jiri);
+    $response = $this->post(route('jiris.index'), $jiri);
 
     // Assert
     assertDatabaseHas('jiris', ['name' => $jiri['name']]);
@@ -90,7 +90,6 @@ it(
     }
 );
 
-
 it('display a complete list of jiris on the jiri index page', function () {
     $user = User::factory()->create();
     \Pest\Laravel\actingAs($user);
@@ -142,7 +141,6 @@ it('validate informations about a new jiri', function () {
     $response->assertInvalid('date');
 });
 
-
 it('creates a jiri with its projects associated from a request containing jiri data and project ids'
 ,function(){
     // Homeworks
@@ -169,6 +167,7 @@ it('creates a jiri with its projects associated from a request containing jiri d
         expect(Project::all()->count())->toBe(2);
         expect(Homework::all()->count())->toBe(2);
     });
+
 it('creates a jiri with its contacts associated from a request containing jiri data and contacts ids including their roles'
     ,function(){
     // Attendances

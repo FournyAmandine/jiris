@@ -50,7 +50,7 @@ it('display a complete list of contacts on the contact index page', function () 
         ->for(auth()->user())
         ->create();
 
-    $response = $this->get('/contacts');
+    $response = $this->get(route('contacts.index'));
 
     $response->assertStatus(200);
     $response->assertViewIs('contacts.index');
