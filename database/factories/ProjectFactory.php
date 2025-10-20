@@ -15,4 +15,17 @@ class ProjectFactory extends Factory
             'name' => $this->faker->name(),
         ];
     }
+
+    public function withoutName(): ProjectFactory
+    {
+        return $this->state(function (array $attributes) {
+
+            return [
+
+                'name' => null,
+
+            ];
+
+        });
+    }
 }

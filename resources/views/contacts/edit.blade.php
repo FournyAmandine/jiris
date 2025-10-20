@@ -8,7 +8,7 @@
     </head>
     <body>
         <h1 class="font-bold text-4xl my-4 text-center flex flex-col mx-auto">Modifiez votre contact</h1>
-        <form enctype="multipart/form-data" method="post" action="{{ route('contacts.store') }}" class="max-w-1/2 mx-auto my-10 shadow-2xl p-10 rounded-2xl">
+        <form enctype="multipart/form-data" method="post" action="{{ route('contacts.update', $contact->id) }}" class="max-w-1/2 mx-auto my-10 shadow-2xl p-10 rounded-2xl">
             @method('PATCH')
             @csrf
             <div class="flex flex-col">

@@ -135,7 +135,7 @@ it('validate informations about a new jiri', function () {
 
     \Pest\Laravel\actingAs($user);
 
-    $response = $this->post('/jiris', $jiri);
+    $response = $this->post(route('jiris.index'), $jiri);
 
     $response->assertInvalid('name');
     $response->assertInvalid('date');
