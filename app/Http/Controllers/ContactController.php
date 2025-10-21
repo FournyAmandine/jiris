@@ -20,20 +20,19 @@ class ContactController extends Controller
     {
         $validated = $request->validated();
 
-        if ($validated['avatar']){
-            $new_original_file_name = uniqid().'.'.config('contactsavatars.avatar_extension');
+        if ($validated['avatar']) {
+            $new_original_file_name = uniqid() . '.' . config('contactsavatars.avatar_extension');
             $full_path_to_original = Storage::putFileAs(config('contactsavatars.original_path'),
-                    $validated['avatar'],
-                    $new_original_file_name,
-                );
+                $validated['avatar'],
+                $new_original_file_name,
+            );
 
-            if ($full_path_to_original){
+            if ($full_path_to_original) {
                 $validated['avatar'] = $new_original_file_name;
 
                 ProcessUploadedContactAvatar::dispatch($full_path_to_original, $new_original_file_name);
-            }
-            else{
-                $validated['avatar'] ='';
+            } else {
+                $validated['avatar'] = '';
             }
         }
 
@@ -67,7 +66,7 @@ class ContactController extends Controller
         return view('contacts.edit', compact('contact'));
     }
 
-   /* public function update(Contact $contact, StoreContactRequest $request)
+    public function update(Contact $contact, StoreContactRequest $request)
     {
 
         $validated = $request->validated();
@@ -75,26 +74,20 @@ class ContactController extends Controller
 
         $this->authorize('update', $contact);
 
-        Contact::upsert([
+        $contact->upsert(
             [
-                'name'=>$validated['name'],
-                'email'=>$validated['email']
-            ]
-        ], 'id',
-        ['name', 'email']);
+                [
+                    'id' => $contact->id,
+                    'user_id' => \auth()->user()->id,
+                    'name' => $validated['name'],
+                    'email' => $validated['email'],
+                ],
+            ], 'id',
+            ['name', 'email']
+        );
 
         return redirect(route('contacts.show', $contact->id));
 
-    }*/
-    public function update(Contact $contact, StoreContactRequest $request)
-    {
-        $validated = $request->validated();
-
-        $this->authorize('update', $contact);
-
-        $contact->update($validated);
-
-        return redirect()->route('contacts.show', $contact->id);
     }
 
 }
