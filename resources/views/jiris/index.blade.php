@@ -6,9 +6,9 @@
     <title>{{__('page-title.list')}} - Jiri </title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="w-2/5 m-auto">
-<div class="flex items-center justify-center mb-10 mt-10">
-    <svg class="" height="100px" width="100px" version="1.1" id="_x32_" xmlns="http://www.w3.org/2000/svg"
+<body class="w-3/5 m-auto">
+<div class="flex items-center justify-center my-8">
+    <svg class="" height="80px" width="80px" version="1.1" id="_x32_" xmlns="http://www.w3.org/2000/svg"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          viewBox="0 0 512 512" xml:space="preserve">
         <g>
@@ -25,17 +25,37 @@
     <h1 class="text-4xl ml-5 font-bold">Mes jiris</h1>
 </div>
 
-@foreach($jiris as $jiri)
-    <div class="relative shadow-2xl rounded-2xl mb-8 flex hover:scale-105">
-        <a class="absolute top-0 left-0 right-0 bottom-0 w-1/1 inline-block hover:text-blue-800 text-lg"
-           href="{{route('jiris.show', $jiri->id)}}"></a>
-        <div class="p-15">
-            <p class="">{{ $jiri->name}}</p>
-            <p class="mt-5">{{$jiri->date}}</p>
-        </div>
-        <p class="w-1/2 p-10 pt-15">{{$jiri->description}}</p>
-    </div>
-@endforeach
+<table class="min-w-full border border-gray-300 border-separate border-spacing-0 rounded-2xl shadow-2xl overflow-hidden">
+
+    <thead class="bg-gray-200 text-lg">
+    <tr>
+        <th scope="col" class="py-4 px-6 text-center font-semibold border-r-2 border-b-2 border-gray-300">Nom</th>
+        <th scope="col" class="py-4 px-6 text-center font-semibold border-r-2 border-b-2 border-gray-300">Date</th>
+        <th scope="col" class="py-4 px-6 text-center font-semibold border-r-2 border-b-2 border-gray-300">Évalués</th>
+        <th scope="col" class="py-4 px-6 text-center font-semibold border-r-2 border-b-2 border-gray-300">Évaluateurs</th>
+        <th scope="col" class="py-4 px-6 text-center font-semibold border-b-2 border-gray-300">Projets</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    @foreach($jiris as $jiri)
+        <tr class="hover:bg-gray-50 transition-all duration-200">
+            <td class="text-left py-4 px-6 border font-semibold border-gray-200">
+                <a href="{{ route('jiris.show', $jiri->id) }}"
+                   class="inline-block hover:text-blue-800 hover:underline font-medium transition-colors duration-150 w-1/1"> {{ $jiri->name }}</a>
+            </td>
+            <td class="text-center py-4 px-6 border border-gray-200 text-gray-700">
+                {{ \Carbon\Carbon::parse($jiri->date)->translatedFormat('d/m/Y') }}
+            </td>
+            <td class="text-center py-4 px-6 border border-gray-200 text-gray-700">{{ $jiri->evaluated_count }}</td>
+            <td class="text-center py-4 px-6 border border-gray-200 text-gray-700">{{ $jiri->evaluators_count }}</td>
+            <td class="text-center py-4 px-6 border border-gray-200 text-gray-700">{{ $jiri->projects_count }}</td>
+        </tr>
+
+    @endforeach
+    </tbody>
+</table>
+
 
 </body>
 </html>
