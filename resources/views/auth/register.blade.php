@@ -10,14 +10,9 @@
         @csrf
         <p class="text-red-600 text-xs mb-3">{{__('register.fields_are_required')}}</p>
     <fieldset>
-        <div  class="flex flex-col flex-1 mb-4">
-            <label for="name">{{__('register.name')}}<small class="text-red-600 ml-1">*</small></label>
-            <input class="border-1 border-gray-300 rounded-md p-1 mt-1" type="text" id="name" name="name"  value="{{ old('name') }}">
-            @error('name')
-            <p class=
-                   "error text-red-600 text-xs">{{ $message }}</p>
-            @enderror
-        </div>
+        @component('components.form.fields.input', ['type' => 'text', 'field_name' => 'name', 'placeholder' => 'pedro pascal', 'required' => 'required'])
+            Entrez votre nom<small class="text-red-600 ml-1">*</small>
+        @endcomponent
         @component('components.form.fields.input', ['type' => 'email', 'field_name' => 'email', 'placeholder' => 'pedro.pascal@gmail.com', 'required' => 'required'])
             Entrez votre email<small class="text-red-600 ml-1">*</small>
         @endcomponent

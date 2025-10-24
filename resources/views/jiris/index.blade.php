@@ -9,7 +9,7 @@
 @component('components.menu')
 @endcomponent
 
-    <x-form.table.table :column_names="['Nom','Date','Evalués','Evaluateurs','Projets']">
+    <x-table.table :column_names="['Nom','Date','Evalués','Evaluateurs','Projets']">
     @foreach($jiris as $jiri)
         <tr class="hover:bg-gray-50 transition-all duration-200">
             <td class="text-left py-4 px-6 border font-semibold border-gray-200">
@@ -25,7 +25,7 @@
         </tr>
 
     @endforeach
-    </x-form.table.table>
+    </x-table.table>
 </body>
 
 @component('components.footer')

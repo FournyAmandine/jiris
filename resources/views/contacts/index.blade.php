@@ -7,6 +7,8 @@
     @include('svg.person')
 </header>
 
+<x-menu></x-menu>
+
 
 <x-link>
     Créer un contact
@@ -15,8 +17,7 @@
     </x-slot:href>
 </x-link>
 
-<x-form.table.table :column_names="['Nom','Adresse email','Avatar']">
-    {{-- Tu peux aussi mettre les lignes ici --}}
+<x-table.table :column_names="['Nom','Adresse email','Avatar']">
     @foreach($contacts as $contact)
         <tr class="hover:bg-indigo-50 transition-all duration-200 border-b border-gray-100">
             <td class="px-6 py-4 border-b border-gray-200">
@@ -39,7 +40,7 @@
          @endif
         </tr>
     @endforeach
-</x-form.table.table>
+</x-table.table>
 </body>
 @component('components.footer')
 @endcomponent
