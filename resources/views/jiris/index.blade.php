@@ -26,6 +26,7 @@
 
     @endforeach
     </x-table.table>
+{!! $jiris->links() !!}
 </body>
 
 @component('components.footer')

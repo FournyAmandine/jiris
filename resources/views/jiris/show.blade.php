@@ -4,6 +4,7 @@
     </x-slot:title>
 </x-head>
 <body class="w-1/2 m-auto">
+<x-menu></x-menu>
 <header class="mt-20 mb-20">
     <div class="flex items-center justify-center mb-10 mt-10">
         @include('svg.student_cap')
@@ -62,9 +63,8 @@
                 </x-slot:text>
             </x-show.div>
         </div>
-    </section>
     <x-link>
-        Modifier le contact
+        Modifier le jiri
         <x-slot:class_div>
             w-5/5 flex justify-center m-auto mt-10 border-gray-300 border-t
         </x-slot:class_div>

@@ -22,7 +22,7 @@
 </x-link>
 
 <main class="w-4/5 m-auto">
-    <x-form.table.table :column_names="['Nom']">
+    <x-table.table :column_names="['Nom']">
         @foreach($projects as $project)
             <tr class="hover:bg-gray-50 transition-all duration-200">
                 <td class="text-left py-4 px-6 border font-semibold border-gray-200">
@@ -32,7 +32,7 @@
             </tr>
 
         @endforeach
-    </x-form.table.table>
+    </x-table.table>
 </main>
 
 </body>

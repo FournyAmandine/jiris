@@ -1,6 +1,7 @@
 @component('components.head', ['title' => 'Création d‘un jiri'])
 @endcomponent
 <body class="p-6">
+<x-menu></x-menu>
 @include('svg.student_cap')
     <h1 class="font-bold text-4xl my-4 text-center flex flex-col mx-auto">{!! __('headings.create_your_jiri') !!}</h1>
 
@@ -20,21 +21,26 @@
             @endcomponent
 
         </fieldset>
-        <fieldset class="border-2 p-5 my-10 rounded-lg shadow-2xl">
-            <legend class="text-2xl p-2">Contacts</legend>
-            @foreach($contacts as $contact)
-                <div class="border-b-1 p-4 pr-80 mb-3 flex justify-between items-center">
-                    <div>
-                        <input type="checkbox" name="contacts[{{$contact->id}}][checked]" id="{{$contact->name}}" value="{{$contact->id}}">
-                        <label for="{{$contact->name}}">{{$contact->name}}</label>
+        {{-- Contacts --}}
+        <fieldset class="border border-gray-200 p-6 rounded-2xl">
+            <legend class="text-2xl font-semibold px-2">Contacts</legend>
+            <div class="flex flex-col gap-3 mt-3">
+                @foreach($contacts as $contact)
+                    <div class="flex items-center justify-between border-b border-gray-100 py-2">
+                        <div class="flex items-center gap-2">
+                            <input class="contact" value="{!! $contact->id !!}" type="checkbox"
+                                   name="contacts[{!! $contact->id !!}]" id="contact{!! $contact->id !!}">
+                            <label for="contact{!! $contact->id !!}" class="font-medium">{{ $contact->name }}</label>
+                        </div>
+                        <select id="role{!! $contact->id !!}" name="contacts[{!! $contact->id !!}][role]"
+                                class="border border-gray-300 rounded-xl p-2 disabled:opacity-50"
+                                disabled>
+                            <option value="evaluated">Evalué</option>
+                            <option value="evaluator">Evaluateur</option>
+                        </select>
                     </div>
-                    <select name="contacts[{{$contact->id}}][role]" id="role1" class="border-1 p-2 rounded-lg">
-                        <option selected value="none">Rôle</option>
-                        <option value="evalue">Evalué</option>
-                        <option value="evaluateur">Evaluateur</option>
-                    </select>
-                </div>
-            @endforeach
+                @endforeach
+            </div>
         </fieldset>
         <fieldset class="border-2 p-5 my-10 rounded-lg shadow-2xl">
             <legend class="text-2xl p-2">Projets</legend>
@@ -53,6 +59,22 @@
         @endcomponent
 
     </form>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const checkboxes = document.querySelectorAll('.contact');
+
+        checkboxes.forEach(checkbox => {
+            const id = checkbox.value;
+            const select = document.getElementById(`role${id}`);
+
+            checkbox.checked ? select.disabled = false : select.disabled = true;
+
+            checkbox.addEventListener('change', () => {
+                checkbox.checked ? select.disabled = false : select.disabled = true;
+            });
+        });
+    });
+</script>
 </body>
 @component('components.footer')
 @endcomponent

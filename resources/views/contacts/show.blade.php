@@ -4,6 +4,7 @@
     </x-slot:title>
 </x-head>
 <body class="w-1/2 m-auto">
+
 <x-menu></x-menu>
 <h1 class="font-bold text-4xl my-15 text-center flex flex-col mx-auto">{{$contact->name}}</h1>
 
