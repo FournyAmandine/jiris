@@ -23,6 +23,7 @@ class StoreProjectRequest extends FormRequest
     {
         return [
             'name' => 'required',
+            'jiris.*' => 'nullable'
         ];
     }
 }

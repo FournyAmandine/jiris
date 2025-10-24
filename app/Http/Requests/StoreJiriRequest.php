@@ -11,7 +11,7 @@ class StoreJiriRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,11 @@ class StoreJiriRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'name' => 'required',
+            'date' => 'required|date',
+            'description' => 'nullable',
+            'contacts.*' => 'nullable|array',
+            'projects.*' => 'nullable',
         ];
     }
 }
