@@ -6,7 +6,11 @@
         @foreach($column_names as $column_name)
             <th scope="col"
                 class="py-4 px-6 text-center font-semibold border-r-2 border-b-2 border-gray-300">
-                {{ $column_name }}
+                <div class="flex justify-center items-center gap-4">
+                    {{ $column_name }}
+                        @include('svg.arrow_down')
+                </div>
+
             </th>
         @endforeach
     </tr>
