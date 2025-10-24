@@ -30,7 +30,7 @@
             @endcomponent
 
 
-            @component('components.form.fields.link', ['text_p' => 'Pas encore de compte', 'text_a' => 'Enregistrez-vous', 'href' => route('register.store')])
+            @component('components.form.fields.link', ['text_p' => 'Pas encore de compte?', 'text_a' => 'Enregistrez-vous', 'href' => route('register.store')])
             @endcomponent
 
         </fieldset>

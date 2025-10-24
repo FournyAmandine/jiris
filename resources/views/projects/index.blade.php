@@ -1,11 +1,8 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Mes projets - Jiri</title>
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-</head>
+<x-head>
+    <x-slot:title>
+        Liste des projets
+    </x-slot:title>
+</x-head>
 <body class="w-2/5 m-auto">
 <header>
     <div class="flex items-center justify-center mb-10 mt-10">
@@ -16,32 +13,29 @@
     </div>
 </header>
 
-<main>
-    <table class="min-w-full border border-gray-300 border-separate border-spacing-0 rounded-2xl shadow-2xl overflow-hidden">
+<x-link>
+    Créer un projet
+    <x-slot:href>
+        {!! route('projects.create') !!}
+    </x-slot:href>
+</x-link>
 
-        <thead class="bg-gray-200 text-lg">
-        <tr>
-            <th scope="col" class="py-4 px-6 text-center font-semibold border-r-2 border-b-2 border-gray-300">Nom</th>
-            <th scope="col" class="py-4 px-6 text-center font-semibold border-r-2 border-b-2 border-gray-300">Date</th>
-        </tr>
-        </thead>
-
-        <tbody>
+<main class="w-4/5 m-auto">
+    <x-form.table.table :column_names="['Nom']">
         @foreach($projects as $project)
             <tr class="hover:bg-gray-50 transition-all duration-200">
                 <td class="text-left py-4 px-6 border font-semibold border-gray-200">
-                    <a href="{{ route('jiris.show', $project->id) }}"
-                       class="inline-block hover:text-blue-800 hover:underline font-medium transition-colors duration-150 w-1/1"> {{ $project->name }}</a>
-                </td>
-                <td class="text-center py-4 px-6 border border-gray-200 text-gray-700">
-                    {{ \Carbon\Carbon::parse($project->date)->translatedFormat('d/m/Y') }}
+                    <a href="{{ route('projects.show', $project->id) }}"
+                       class="inline-block  text-center hover:text-blue-800 hover:underline font-medium transition-colors duration-150 w-1/1"> {{ $project->name }}</a>
                 </td>
             </tr>
 
         @endforeach
-        </tbody>
-    </table>
+    </x-form.table.table>
 </main>
 
 </body>
-</html>
+
+<x-footer>
+
+</x-footer>
