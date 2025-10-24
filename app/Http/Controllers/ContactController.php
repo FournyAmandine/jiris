@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreContactRequest;
 use App\Jobs\ProcessUploadedContactAvatar;
 use App\Models\Contact;
+use App\Models\Jiri;
+use App\Models\Project;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
@@ -57,13 +59,17 @@ class ContactController extends Controller
 
     public function create()
     {
-        return view('contacts.create');
+        $projects = Auth::user()->projects;
+        $jiris = Auth::user()->jiris;
+        return view('contacts.create', compact('jiris', 'projects'));
 
     }
 
     public function edit(Contact $contact)
     {
-        return view('contacts.edit', compact('contact'));
+        $jiris = Jiri::all();
+        $projects = Project::all();
+        return view('contacts.edit', compact('contact', 'projects', 'jiris'));
     }
 
     public function update(Contact $contact, StoreContactRequest $request)

@@ -2,12 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreContactRequest;
 use App\Http\Requests\StoreProjectRequest;
 use App\Models\Contact;
+use App\Models\Jiri;
 use App\Models\Project;
-use App\Models\User;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class ProjectController extends Controller
@@ -30,19 +28,25 @@ class ProjectController extends Controller
         return view('projects.index', compact('projects'));
     }
 
-    public function show(Project $project)
+    public function show(StoreProjectRequest $project)
     {
-        return view('projects.show', compact('project'));
+        $contacts = Auth::user()->contacts;
+        $jiris = $project->jiris()->attach($project['jiris']);
+        return view('projects.show', compact('project', 'jiris', 'contacts'));
     }
 
-    public function create(Project $project)
+    public function create()
     {
-        return view('projects.create');
+        $contacts = Auth::user()->contacts;
+        $jiris = Auth::user()->jiris;
+        return view('projects.create', compact('jiris', 'contacts'));
     }
 
     public function edit(Project $project)
     {
-        return view('projects.edit', compact('project'));
+        $contacts = Contact::all();
+        $jiris = Jiri::all();
+        return view('projects.edit', compact('project', 'jiris', 'contacts'));
     }
 
     public function update(Project $project, StoreProjectRequest $request)
